@@ -1,0 +1,17 @@
+THE CODE FOR 'STEP RESPONSE OF RLC CIRCUIT'
+
+// Define Laplace variable
+s = poly(0, 's');
+// Define Transfer Function from ODE: d2y/dt2 + 6*dy/dt + 8*y = 8*x(t)
+H = syslin('c', 8 / (s^2 + 6*s + 8));
+// Time vector
+t = 0:0.01:5;
+// Simulate Step Response
+y = csim('step', t, H);
+// Plotting
+clf();
+plot(t, y);
+xgrid();
+title('Step Response of RLC Circuit');
+xlabel('Time (s)');
+ylabel('Voltage across capacitor (V)');
