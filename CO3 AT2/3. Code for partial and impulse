@@ -1,0 +1,15 @@
+THE CODE FOR 'PARTIAL FRACTIONS , IMPULSE AND STEP RESPONSES' 
+
+s = poly(0, 's');
+H = 10*(s+1)/((s+2)*(s+5));
+// Partial fraction decomposition
+pf = pfss(H);
+disp("Partial Fractions:");
+disp(pf);
+H_sys = syslin('c', H);
+t = 0:0.01:5;
+y_impulse = csim('impulse', t, H_sys);
+y_step = csim('step', t, H_sys);
+clf();
+subplot(2,1,1); plot(t, y_impulse); title('Impulse Response');
+subplot(2,1,2); plot(t, y_step); title('Step Response');
