@@ -1,0 +1,16 @@
+THE CODE FOR 'STABILITY ANALYSISUSING ROOT SCANNING LOOP'
+
+s = poly(0, 's');
+K_vals = 0:0.5:20;
+max_real_parts = zeros(1, length(K_vals));
+for i = 1:length(K_vals)
+K = K_vals(i);
+p = s^4 + 5*s^3 + 8*s^2 + 6*s + K;
+r = roots(p);
+max_real_parts(i) = max(real(r)); // Find maximum real part
+end
+clf();
+plot(K_vals, max_real_parts, 'b-', K_vals, zeros(1, length(K_vals)), 'r--');
+title('Stability Test: Max Real Part of Roots vs K');
+xlabel('K'); ylabel('Max Real Part');
+legend(['Max Real Part', 'Stability Limit (0)']);
