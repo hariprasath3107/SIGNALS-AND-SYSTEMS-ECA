@@ -1,0 +1,12 @@
+THE CODE FOR 'BODE PLOT AND -3dB CUTOFF FREQUECY'
+
+s = poly(0, 's');
+H = syslin('c', 100 / (s^2 + 10*s + 100));
+clf();
+bode(H, 0.1, 100);
+title('Bode Plot with Natural Frequency and Damping');
+// Natural frequency and Damping Ratio
+wn = sqrt(100); // 10 rad/s
+zeta = 10 / (2 * wn); // 0.5
+disp("Natural Frequency (rad/s): " + string(wn));
+disp("Damping Ratio: " + string(zeta));
