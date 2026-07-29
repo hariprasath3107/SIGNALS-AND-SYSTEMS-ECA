@@ -1,0 +1,24 @@
+THE CODE FOR 'PD CONTROLLER DESIGN & NYQUIST STABILITY
+
+s = poly(0, 's');
+G = 1 / (s^2 + s);
+Kp = 10; Kd = 2;
+C = Kp + Kd*s;
+// Open-loop and Closed-loop transfer functions
+L = syslin('c', G * C);
+G_cl = L /. 1; // Feedback calculation: L/(1+L)
+clf();
+nyquist(L);
+title('Nyquist Plot of Open-Loop System');
+// Extract gain & phase margins
+[pm, f_pm] = p_margin(L);
+[gm, f_gm] = g_margin(L);
+disp("Phase Margin (deg): " + string(pm));
+disp("Gain Margin (dB): " + string(gm));
+// Closed-loop stability
+poles_cl = roots(G_cl.den);
+if max(real(poles_cl)) < 0 then
+disp("System is STABLE");
+else
+disp("System is UNSTABLE");
+end
