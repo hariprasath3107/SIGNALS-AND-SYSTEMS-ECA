@@ -1,0 +1,30 @@
+// Define parameters
+N = 31; // Total number of samples
+n = 0:N-1; // Sample index
+n1 = 10; // Start of rectangular pulse
+n2 = 20; // End of rectangular pulse
+
+// Define the rectangular pulse x[n]
+x = zeros(1, N); // Initialize the signal with zeros
+x(n1+1:n2+1) = 1; // Set values between n1 and n2 to 1
+
+// Compute DTFT
+omega = linspace(-%pi, %pi, 1000); // Frequency range
+X = x * exp(-%i * n' * omega); // DTFT calculation
+
+// Plot the magnitude of DTFT
+
+figure();
+plot(omega/%pi, abs(X));
+xlabel('Normalized Frequency (\omega/\pi)');
+ylabel('|X(e^{j\omega})|');
+title('Magnitude of DTFT of Rectangular Pulse');
+
+// Plot the phase of DTFT
+figure();
+plot(omega/%pi, atan(imag(X)./real(X)));
+xlabel('Normalized Frequency (\omega/\pi)');
+ylabel('Phase of X(e^{j\omega})');
+title('Phase of DTFT of Rectangular Pulse');
+
+// Analyze the results in the Scilab console or report
