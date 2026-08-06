@@ -1,0 +1,25 @@
+clc;
+clear;
+// Time vector (0 to 5 sec, step 0.001 s)
+t = 0:0.001:5;
+dt = t(2) - t(1); // time step
+// Define continuous-time signal x(t) = e^(-2t) * sin(3t)
+x = exp(-2*t) .* sin(3*t);
+// s-domain values
+sigma = 0; // Damping factor
+omega = -20:0.5:20; // Frequency range
+// Initialize Laplace magnitude array
+X_mag = zeros(1, length(omega));
+// Numerical Laplace calculation (manual trapezoidal rule)
+for k = 1:length(omega)
+s = sigma + %i*omega(k);
+Xs = x .* exp(-s*t);
+// trapezoidal integration
+X_mag(k) = abs( sum(Xs(1:$-1) + Xs(2:$)) * dt / 2 );
+end
+// Plot magnitude spectrum
+clf;
+plot(omega, X_mag, 'b');
+xlabel("Frequency (rad/s)");
+ylabel("|X(s)|");
+title("Numerical Laplace Transform Magnitude");
