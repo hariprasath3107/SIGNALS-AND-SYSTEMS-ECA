@@ -1,0 +1,50 @@
+// Test Case: Z-Transform of a Given Discrete-Time Signal
+// Define the discrete time index
+n = 0:3; // Time index from 0 to 3
+// Define the discrete-time signal x[n]
+
+x_n = [1, 2, 3, 4]; // Given signal
+// Define the symbolic variable for Z
+z = poly(0, 'z'); // Define a polynomial variable z
+// Compute the Z-transform
+X_z = 0; // Initialize Z-transform
+for i = 1:length(n)
+X_z = X_z + x_n(i) * z^(-n(i)); // Sum x[n] * z^(-n)
+end
+// Display the Z-transform expression
+disp("Z-transform of x[n] = " + string(X_z));
+// Define a range of z values on the unit circle
+theta = 0:0.01:2*%pi; // Angle from 0 to 2*pi
+z_vals = cos(theta) + %i * sin(theta); // Points on the unit circle
+// Initialize arrays to store magnitude and phase
+magnitude = zeros(1, length(theta));
+phase = zeros(1, length(theta));
+// Evaluate X(z) on the unit circle
+for i = 1:length(z_vals)
+z_val = z_vals(i);
+X_z_val = 0;
+for j = 1:length(n)
+X_z_val = X_z_val + x_n(j) * z_val^(-n(j)); // Evaluate X(z) at z_vals(i)
+end
+magnitude(i) = abs(X_z_val); // Magnitude
+// Calculate phase using atan
+phase(i) = atan(imag(X_z_val) / real(X_z_val));
+if real(X_z_val) < 0 then
+phase(i) = phase(i) + %pi;
+end
+end
+// Plot magnitude and phase of the Z-transform
+clf; // Clear the current figure
+// Plot magnitude
+subplot(2,1,1);
+plot(theta, magnitude, 'b');
+xlabel('Theta (radians)');
+ylabel('|X(z)|');
+title('Magnitude of Z-transform');
+
+// Plot phase
+subplot(2,1,2);
+plot(theta, phase, 'r');
+xlabel('Theta (radians)');
+ylabel('Angle(X(z))');
+title('Phase of Z-transform');
