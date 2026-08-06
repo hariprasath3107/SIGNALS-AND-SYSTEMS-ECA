@@ -1,0 +1,94 @@
+// =====================================================
+// DIT FFT Implementation in Scilab
+// =====================================================
+
+clear;
+clc;
+clf;
+
+// ---------- Input Signal ----------
+N = 8; // Must be a power of 2
+n = 0:N-1;
+
+// Example signal
+x = sin(2*%pi*1*n/N) + 0.5*sin(2*%pi*3*n/N);
+
+// ---------- Bit Reversal Function ----------
+function y = bitrevorder(x)
+    N = length(x);
+    bits = round(log(N)/log(2));
+    y = zeros(1, N);
+
+    for i = 0:N-1
+        num = i;
+        rev = 0;
+
+        for j = 1:bits
+            rev = rev*2 + modulo(num,2);
+            num = floor(num/2);
+        end
+
+        y(rev+1) = x(i+1);
+    end
+endfunction
+
+// ---------- DIT FFT Function ----------
+function X = DIT_FFT(x)
+
+    N = length(x);
+
+    // Bit-reverse ordering
+    x = bitrevorder(x);
+
+    stages = round(log(N)/log(2));
+
+    for s = 1:stages
+
+        m = 2^s;
+        halfm = m/2;
+        Wm = exp(-%i*2*%pi/m);
+
+        for k = 0:(N/m - 1)
+
+            for j = 0:(halfm-1)
+
+                t = (Wm^j) * x(k*m + j + halfm + 1);
+                u = x(k*m + j + 1);
+
+                x(k*m + j + 1) = u + t;
+                x(k*m + j + halfm + 1) = u - t;
+
+            end
+
+        end
+
+    end
+
+    X = x;
+
+endfunction
+
+// ---------- Compute FFT ----------
+X_fft = DIT_FFT(x);
+
+// ---------- Magnitude Spectrum ----------
+magX = abs(X_fft);
+
+// ---------- Display FFT Values ----------
+disp("FFT Output:");
+disp(X_fft);
+
+disp("Magnitude Spectrum:");
+disp(magX);
+
+// ---------- Plot Input Signal ----------
+subplot(2,1,1);
+plot(n, x);
+xtitle("Input Signal", "Sample Index (n)", "Amplitude");
+xgrid();
+
+// ---------- Plot Magnitude Spectrum ----------
+subplot(2,1,2);
+plot2d3(n, magX);
+xtitle("Magnitude Spectrum using DIT FFT", "Frequency Index (k)", "|X(k)|");
+xgrid();
